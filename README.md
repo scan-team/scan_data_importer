@@ -28,5 +28,11 @@ $ python test.py [path]
 ### Import single map
 
 ```
-$ python import_data.py [path] ([root])
+$ python import_data.py [path] (-r [root])
+```
+
+### Import multiple maps
+
+```
+$ python import_data_multi.py [base_path] (-r [root])
 ```
