@@ -19,7 +19,7 @@
         "grrmlog-parser": {
             "editable": true,
             "git": "https://github.com/scan-team/grrmlog_parser.git",
-            "ref": "259eb4521779397fb64de766423d10ff15c8a7f5"
+            "ref": "e9af277068b35375636566bb8ed55614a0ea29b4"
         },
         "numpy": {
             "hashes": [
