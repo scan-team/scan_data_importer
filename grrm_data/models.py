@@ -1,5 +1,5 @@
 from sqlalchemy import Column, DateTime, Float, Integer, String, ForeignKey
-from sqlalchemy.types import BINARY, TEXT, VARCHAR
+from sqlalchemy.types import BINARY, TEXT, VARCHAR, JSON
 from sqlalchemy.orm import relationship
 
 # from service.database import Base
@@ -12,8 +12,8 @@ class GRRMMap(Base):
 
     id = Column(BINARY(16), primary_key=True)
 
-    atom_name = Column(TEXT)
-    initxyz = Column(TEXT)
+    atom_name = Column(JSON)
+    initxyz = Column(JSON)
     fname_top_abs = Column(VARCHAR(1024))
     fname_top_rel = Column(VARCHAR(256))
     natoms = Column(Integer)
@@ -29,7 +29,7 @@ class GRRMMap(Base):
     jobtype = Column(VARCHAR(20))
     pathtype = Column(VARCHAR(20))
     nobondrearrange = Column(Integer)
-    siml_tempearture_kelvin = Column(TEXT)
+    siml_tempearture_kelvin = Column(JSON)
     siml_pressure_atm = Column(Float)
     energyshiftvalue_au = Column(Float)
     level = Column(VARCHAR(256))
@@ -50,14 +50,13 @@ class Eq(Base):
     nid = Column(Integer)
     category = Column(VARCHAR(20))
     symmetry = Column(VARCHAR(20))
-    xyz = Column(TEXT)
-    energy = Column(TEXT)
-    gradient = Column(TEXT)
+    xyz = Column(JSON)
+    energy = Column(JSON)
+    gradient = Column(JSON)
     s2_value = Column(Float)
-    dipole = Column(TEXT)
+    dipole = Column(JSON)
     comment = Column(TEXT)
-    electronic_energy_au = Column(TEXT)
-    hess_eigenvalue_au = Column(TEXT)
+    hess_eigenvalue_au = Column(JSON)
 
     map = relationship("GRRMMap")
 
@@ -71,18 +70,17 @@ class Edge(Base):
     edge_id = Column(Integer)
     category = Column(VARCHAR(20))
     symmetry = Column(VARCHAR(20))
-    xyz = Column(TEXT)
-    energy = Column(TEXT)
+    xyz = Column(JSON)
+    energy = Column(JSON)
     gradient = Column(TEXT)
     s2_value = Column(Float)
-    dipole = Column(TEXT)
+    dipole = Column(JSON)
     comment = Column(TEXT)
-    electronic_energy_au = Column(TEXT)
-    hess_eigenvalue_au = Column(TEXT)
+    hess_eigenvalue_au = Column(JSON)
 
     connection0 = Column(Integer)
     connection1 = Column(Integer)
-    pathdata = Column(TEXT)
+    pathdata = Column(JSON)
 
     map = relationship("GRRMMap")
 
@@ -97,14 +95,13 @@ class PNode(Base):
     nid = Column(Integer)
     category = Column(VARCHAR(20))
     symmetry = Column(VARCHAR(20))
-    xyz = Column(TEXT)
-    energy = Column(TEXT)
-    gradient = Column(TEXT)
+    xyz = Column(JSON)
+    energy = Column(JSON)
+    gradient = Column(JSON)
     s2_value = Column(Float)
-    dipole = Column(TEXT)
+    dipole = Column(JSON)
     comment = Column(TEXT)
-    electronic_energy_au = Column(TEXT)
-    hess_eigenvalue_au = Column(TEXT)
+    hess_eigenvalue_au = Column(JSON)
 
     map = relationship("GRRMMap")
     edge = relationship("Edge")
