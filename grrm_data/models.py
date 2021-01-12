@@ -4,11 +4,12 @@ from sqlalchemy.orm import relationship
 
 # from service.database import Base
 from sqlalchemy.ext.declarative import declarative_base
+
 Base = declarative_base()
 
 
 class GRRMMap(Base):
-    __tablename__ = u'maps'
+    __tablename__ = u"maps"
 
     id = Column(BINARY(16), primary_key=True)
 
@@ -42,10 +43,10 @@ class GRRMMap(Base):
 
 
 class Eq(Base):
-    __tablename__ = u'eqs'
+    __tablename__ = u"eqs"
 
     id = Column(BINARY(16), primary_key=True)
-    map_id = Column('map_id', BINARY(16), ForeignKey('maps.id'))
+    map_id = Column("map_id", BINARY(16), ForeignKey("maps.id"))
 
     nid = Column(Integer)
     category = Column(VARCHAR(20))
@@ -62,17 +63,17 @@ class Eq(Base):
 
 
 class Edge(Base):
-    __tablename__ = u'edges'
+    __tablename__ = u"edges"
 
     id = Column(BINARY(16), primary_key=True)
-    map_id = Column('map_id', BINARY(16), ForeignKey('maps.id'))
+    map_id = Column("map_id", BINARY(16), ForeignKey("maps.id"))
 
     edge_id = Column(Integer)
     category = Column(VARCHAR(20))
     symmetry = Column(VARCHAR(20))
     xyz = Column(JSON)
     energy = Column(JSON)
-    gradient = Column(TEXT)
+    gradient = Column(JSON)
     s2_value = Column(Float)
     dipole = Column(JSON)
     comment = Column(TEXT)
@@ -86,11 +87,11 @@ class Edge(Base):
 
 
 class PNode(Base):
-    __tablename__ = u'path_nodes'
+    __tablename__ = u"path_nodes"
 
     id = Column(BINARY(16), primary_key=True)
-    map_id = Column('map_id', BINARY(16), ForeignKey('maps.id'))
-    edge_id = Column('edge_id', BINARY(16), ForeignKey('edges.id'))
+    map_id = Column("map_id", BINARY(16), ForeignKey("maps.id"))
+    edge_id = Column("edge_id", BINARY(16), ForeignKey("edges.id"))
 
     nid = Column(Integer)
     category = Column(VARCHAR(20))

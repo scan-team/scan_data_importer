@@ -108,7 +108,7 @@ def import_data(path, root_path, session):
         p["s2_value"] = pt.s2_value
         p["dipole"] = pt.dipole
         p["comment"] = pt.comment
-        # p["hess_eigenvalue_au"] = pt.hess_eigenvalue_au
+        p["hess_eigenvalue_au"] = pt.hess_eigenvalue_au
 
         p["connection0"] = pt.connection[0]
         p["connection1"] = pt.connection[1]
