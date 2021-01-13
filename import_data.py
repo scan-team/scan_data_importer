@@ -12,6 +12,79 @@ from grrmlog_parser.core import parse
 from grrm_data.models import Edge, GRRMMap, Eq, PNode
 
 
+def create_eq_obj(session, n, map_obj):
+    eq = {}
+
+    eq_id = ulid.new()
+    eq["id"] = eq_id.bytes
+    eq["map"] = map_obj
+
+    eq["nid"] = n.id  # read from the original log
+    eq["category"] = n.category
+    eq["symmetry"] = n.symmetry
+    eq["xyz"] = n.xyz
+    eq["energy"] = n.energy
+    eq["gradient"] = n.gradient
+    eq["s2_value"] = n.s2_value
+    eq["dipole"] = n.dipole
+    eq["comment"] = n.comment
+    eq["hess_eigenvalue_au"] = n.hess_eigenvalue_au
+
+    eq_obj = Eq(**eq)
+
+    session.add(eq_obj)
+
+
+def create_edge_obj(session, e, map_obj):
+    edge = {}
+
+    id = ulid.new()
+    edge["id"] = id.bytes
+    edge["map"] = map_obj
+
+    edge["edge_id"] = e.id  # read from the original log
+    edge["category"] = e.category
+    edge["symmetry"] = e.symmetry
+    edge["xyz"] = e.xyz
+    edge["energy"] = e.energy
+    edge["gradient"] = e.gradient
+    edge["s2_value"] = e.s2_value
+    edge["dipole"] = e.dipole
+    edge["comment"] = e.comment
+    edge["hess_eigenvalue_au"] = e.hess_eigenvalue_au
+
+    edge["connection0"] = e.connection[0]
+    edge["connection1"] = e.connection[1]
+
+    pathdata = [ulid.new().hex for _ in e.pathdata]
+    edge["pathdata"] = pathdata
+
+    edge_obj = Edge(**edge)
+    session.add(edge_obj)
+
+    # Process passdata
+    for i, p_node in enumerate(e.pathdata):
+        pnode_dict = {}
+
+        pnode_dict["id"] = ulid.from_int(int(pathdata[i], 0)).bytes
+        pnode_dict["map"] = map_obj
+        pnode_dict["edge"] = edge_obj
+
+        pnode_dict["nid"] = p_node.id  # read from the original log
+        pnode_dict["category"] = p_node.category
+        pnode_dict["symmetry"] = p_node.symmetry
+        pnode_dict["xyz"] = p_node.xyz
+        pnode_dict["energy"] = p_node.energy
+        pnode_dict["gradient"] = p_node.gradient
+        pnode_dict["s2_value"] = p_node.s2_value
+        pnode_dict["dipole"] = p_node.dipole
+        pnode_dict["comment"] = p_node.comment
+        pnode_dict["hess_eigenvalue_au"] = p_node.hess_eigenvalue_au
+
+        pn_obj = PNode(**pnode_dict)
+        session.add(pn_obj)
+
+
 def import_data(path, root_path, session):
     map = parse(path)
 
@@ -66,130 +139,24 @@ def import_data(path, root_path, session):
     print(map.jobtime)
 
     map_obj = GRRMMap(**m)
-    # print(obj)
+
     q = session.add(map_obj)
 
     # Process eqs
     for n in map.eq_list:
-        eq = {}
-
-        eq_id = ulid.new()
-        eq["id"] = eq_id.bytes
-        eq["map"] = map_obj
-
-        eq["nid"] = n.id  # read from the original log
-        eq["category"] = n.category
-        eq["symmetry"] = n.symmetry
-        eq["xyz"] = n.xyz
-        eq["energy"] = n.energy
-        eq["gradient"] = n.gradient
-        eq["s2_value"] = n.s2_value
-        eq["dipole"] = n.dipole
-        eq["comment"] = n.comment
-        eq["hess_eigenvalue_au"] = n.hess_eigenvalue_au
-
-        eq_obj = Eq(**eq)
-        session.add(eq_obj)
+        create_eq_obj(session, n, map_obj)
 
     # Process pt_list
     for pt in map.pt_list:
-        p = {}
-
-        id = ulid.new()
-        p["id"] = id.bytes
-        p["map"] = map_obj
-
-        p["edge_id"] = pt.id  # read from the original log
-        p["category"] = pt.category
-        p["symmetry"] = pt.symmetry
-        p["xyz"] = pt.xyz
-        p["energy"] = pt.energy
-        p["gradient"] = pt.gradient
-        p["s2_value"] = pt.s2_value
-        p["dipole"] = pt.dipole
-        p["comment"] = pt.comment
-        p["hess_eigenvalue_au"] = pt.hess_eigenvalue_au
-
-        p["connection0"] = pt.connection[0]
-        p["connection1"] = pt.connection[1]
-        pathdata = [str(n.id) for n in pt.pathdata]
-        p["pathdata"] = pathdata
-
-        pt_obj = Edge(**p)
-        session.add(pt_obj)
-
-        # Process passdata
-        for p_node in pt.pathdata:
-            pnode_dict = {}
-
-            id = ulid.new()
-            pnode_dict["id"] = id.bytes
-            pnode_dict["map"] = map_obj
-            pnode_dict["edge"] = pt_obj
-
-            pnode_dict["nid"] = p_node.id  # read from the original log
-            pnode_dict["category"] = p_node.category
-            pnode_dict["symmetry"] = p_node.symmetry
-            pnode_dict["xyz"] = p_node.xyz
-            pnode_dict["energy"] = p_node.energy
-            pnode_dict["gradient"] = p_node.gradient
-            pnode_dict["s2_value"] = p_node.s2_value
-            pnode_dict["dipole"] = p_node.dipole
-            pnode_dict["comment"] = p_node.comment
-            pnode_dict["hess_eigenvalue_au"] = p_node.hess_eigenvalue_au
-
-            pn_obj = PNode(**pnode_dict)
-            session.add(pn_obj)
+        create_edge_obj(session, pt, map_obj)
 
     # Process ts_list
     for ts in map.ts_list:
-        p = {}
+        create_edge_obj(session, ts, map_obj)
 
-        id = ulid.new()
-        p["id"] = id.bytes
-        p["map"] = map_obj
-
-        p["edge_id"] = ts.id  # read from the original log
-        p["category"] = ts.category
-        p["symmetry"] = ts.symmetry
-        p["xyz"] = ts.xyz
-        p["energy"] = ts.energy
-        p["gradient"] = ts.gradient
-        p["s2_value"] = ts.s2_value
-        p["dipole"] = ts.dipole
-        p["comment"] = ts.comment
-        # p["hess_eigenvalue_au"] = ts.hess_eigenvalue_au
-
-        p["connection0"] = ts.connection[0]
-        p["connection1"] = ts.connection[1]
-        pathdata = [str(n.id) for n in ts.pathdata]
-        p["pathdata"] = pathdata
-
-        ts_obj = Edge(**p)
-        session.add(ts_obj)
-
-        # Process passdata
-        for p_node in ts.pathdata:
-            pnode_dict = {}
-
-            id = ulid.new()
-            pnode_dict["id"] = id.bytes
-            pnode_dict["map"] = map_obj
-            pnode_dict["edge"] = ts_obj
-
-            pnode_dict["nid"] = p_node.id  # read from the original log
-            pnode_dict["category"] = p_node.category
-            pnode_dict["symmetry"] = p_node.symmetry
-            pnode_dict["xyz"] = p_node.xyz
-            pnode_dict["energy"] = p_node.energy
-            pnode_dict["gradient"] = p_node.gradient
-            pnode_dict["s2_value"] = p_node.s2_value
-            pnode_dict["dipole"] = p_node.dipole
-            pnode_dict["comment"] = p_node.comment
-            pnode_dict["hess_eigenvalue_au"] = p_node.hess_eigenvalue_au
-
-            pn_obj = PNode(**pnode_dict)
-            session.add(pn_obj)
+    # Process dc_list
+    for dc in map.dc_list:
+        create_edge_obj(session, dc, map_obj)
 
     session.commit()
 
