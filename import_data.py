@@ -56,7 +56,7 @@ def create_edge_obj(session, e, map_obj):
     edge["connection0"] = e.connection[0]
     edge["connection1"] = e.connection[1]
 
-    pathdata = [ulid.new().hex for _ in e.pathdata]
+    pathdata = [ulid.new().str for _ in e.pathdata]
     edge["pathdata"] = pathdata
 
     edge_obj = Edge(**edge)
@@ -66,7 +66,7 @@ def create_edge_obj(session, e, map_obj):
     for i, p_node in enumerate(e.pathdata):
         pnode_dict = {}
 
-        pnode_dict["id"] = ulid.from_int(int(pathdata[i], 0)).bytes
+        pnode_dict["id"] = ulid.from_str(pathdata[i]).bytes
         pnode_dict["map"] = map_obj
         pnode_dict["edge"] = edge_obj
 
