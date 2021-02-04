@@ -85,6 +85,57 @@ def create_edge_obj(session, e, map_obj):
         session.add(pn_obj)
 
 
+def check_map(map_obj, map):
+
+    updated = False
+    # m["id"] = mid.bytes
+    print("map: ", map_obj.id)
+
+    # m["atom_name"] = map.atom_name
+    if map_obj.atom_name != map.atom_name:
+        print("atom_name:")
+        print(map_obj.atom_name)
+        print(map.atom_name)
+        map_obj.atom_name = map.atom_name
+        updated = True
+
+    # m["initxyz"] = map.initxyz
+    if str(map_obj.initxyz) != str(map.initxyz):
+        print("initxyz:")
+        print(map_obj.initxyz)
+        print(map.initxyz)
+        map_obj.initxyz = map.initxyz
+        updated = True
+
+    # m["fname_top_abs"] = path
+    # m["fname_top_rel"] = map.fname_top_rel
+    # m["natoms"] = map.natoms
+    # m["lowest_energy"] = map.lowest_energy
+    # m["highest_energy"] = map.highest_energy
+    # m["neq"] = map.neq
+    # m["nts"] = map.nts
+    # m["npt"] = map.npt
+    # m["jobtime"] = map.jobtime
+    # m["universal_gamma"] = map.universal_gamma
+    # m["infile"] = map.infile
+    # m["scpathpara"] = map.scpathpara
+    # m["jobtype"] = map.jobtype
+    # m["pathtype"] = map.pathtype
+    # m["nobondrearrange"] = map.nobondrearrange
+    # m["siml_tempearture_kelvin"] = map.siml_tempearture_kelvin
+    # m["siml_pressure_atm"] = map.siml_pressure_atm
+    # m["energyshiftvalue_au"] = map.energyshiftvalue_au
+    # m["level"] = map.level
+    # m["spinmulti"] = map.spinmulti
+    # m["totalcharge"] = map.totalcharge
+    # m["jobstatus"] = map.jobstatus
+    # m["ngradient"] = map.ngradient
+    # m["nhessian"] = map.nhessian
+    # m["elapsedtime_sec"] = map.elapsedtime_sec
+
+    return updated
+
+
 def check_update(path, root_path, session):
     map = parse(path)
 
@@ -102,6 +153,13 @@ def check_update(path, root_path, session):
         id = ulid.from_bytes(filteredMap.id)
         print("The map is not existing!!!", id.hex)
         exit(0)
+
+    # compare maps
+    updated = check_map(filteredMap, map)
+
+    print(updated)
+    if updated:
+        session.commit()
 
     print("end.")
     exit(0)
