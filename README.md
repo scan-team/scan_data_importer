@@ -36,3 +36,10 @@ $ python import_data.py [path] (-r [root])
 ```
 $ python import_data_multi.py [base_path] (-r [root])
 ```
+
+
+## Update grrmlog_parser
+
+```
+$ pipenv update grrmlog_parser
+```

@@ -85,7 +85,7 @@ def create_edge_obj(session, e, map_obj):
         session.add(pn_obj)
 
 
-def import_data(path, root_path, session):
+def import_data(path, root_path, session, dry_run):
     map = parse(path)
 
     path = map.fname_top_abs
@@ -158,21 +158,27 @@ def import_data(path, root_path, session):
     for dc in map.dc_list:
         create_edge_obj(session, dc, map_obj)
 
-    session.commit()
+    if dry_run:
+        print(map_obj)
+    else:
+        session.commit()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("path", help="path to the target log top")
     parser.add_argument("-r", "--root_path", help="path to the root folder")
+    parser.add_argument("-n", "--dry_run", help="dry run", action="store_true")
 
     args = parser.parse_args()
 
     path = args.path
     root_path = args.root_path
+    is_dry_run = args.dry_run
 
     print("target:", path)
     print("root:", root_path)
+    print("is_dry_run", is_dry_run)
 
     mysql_host = os.environ["MYSQL_HOSTS"]
     user = os.environ["MYSQL_USER"]
@@ -190,4 +196,4 @@ if __name__ == "__main__":
     Session = orm.sessionmaker(bind=engine)
     session = Session()
 
-    import_data(path, root_path, session)
+    import_data(path, root_path, session, is_dry_run)
