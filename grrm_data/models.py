@@ -59,6 +59,10 @@ class Eq(Base):
     comment = Column(TEXT)
     hess_eigenvalue_au = Column(JSON)
 
+    trafficvolume = Column(JSON)
+    population = Column(JSON)
+    reactionyield = Column(JSON)
+
     map = relationship("GRRMMap")
 
 

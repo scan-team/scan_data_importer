@@ -29,6 +29,9 @@ def create_eq_obj(session, n, map_obj):
     eq["dipole"] = n.dipole
     eq["comment"] = n.comment
     eq["hess_eigenvalue_au"] = n.hess_eigenvalue_au
+    eq["trafficvolume"] = n.trafficvolume
+    eq["population"] = n.population
+    eq["reactionyield"] = n.reactionyield
 
     eq_obj = Eq(**eq)
 
