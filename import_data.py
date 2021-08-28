@@ -104,7 +104,7 @@ def import_data(path, root_path, session, dry_run):
     if filteredMap:
         id = ulid.from_bytes(filteredMap.id)
         print("The map is already existing!!!", id.hex)
-        exit(0)
+        return
 
     m = {}
 
