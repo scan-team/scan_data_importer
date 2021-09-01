@@ -128,7 +128,7 @@ def import_data(path, root_path, session, dry_run):
     m["jobtype"] = map.jobtype
     m["pathtype"] = map.pathtype
     m["nobondrearrange"] = map.nobondrearrange
-    m["siml_tempearture_kelvin"] = map.siml_tempearture_kelvin
+    m["siml_temperature_kelvin"] = map.siml_temperature_kelvin
     m["siml_pressure_atm"] = map.siml_pressure_atm
     m["energyshiftvalue_au"] = map.energyshiftvalue_au
     m["level"] = map.level
