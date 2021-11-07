@@ -54,9 +54,6 @@ if __name__ == "__main__":
     print(f"{len(path_list)} maps are found.")
 
     for p in path_list:
-        if dry_run:
-            print(p)
-        else:
-            import_data(p, root_path, session, dry_run)
+        import_data(p, root_path, session, dry_run)
 
     # import_data(path)

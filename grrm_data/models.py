@@ -30,7 +30,7 @@ class GRRMMap(Base):
     jobtype = Column(VARCHAR(20))
     pathtype = Column(VARCHAR(20))
     nobondrearrange = Column(Integer)
-    siml_tempearture_kelvin = Column(JSON)
+    siml_temperature_kelvin = Column(JSON)
     siml_pressure_atm = Column(Float)
     energyshiftvalue_au = Column(Float)
     level = Column(VARCHAR(256))
