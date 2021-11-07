@@ -7,7 +7,7 @@ verify_ssl = true
 black = "==20.8b1"
 
 [packages]
-grrmlog-parser = {git = "https://github.com/scan-team/grrmlog_parser.git", editable = true}
+grrmlog_parser = {git = "https://github.com/scan-team/grrmlog_parser.git", editable = true}
 pymysql = "*"
 sqlalchemy = "*"
 ulid-py = "*"

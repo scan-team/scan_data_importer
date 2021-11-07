@@ -139,6 +139,8 @@ def import_data(path, root_path, session, dry_run):
     m["nhessian"] = map.nhessian
     m["elapsedtime_sec"] = map.elapsedtime_sec
 
+    m["accessibility"] = 0
+
     print(map.jobtime)
 
     map_obj = GRRMMap(**m)
