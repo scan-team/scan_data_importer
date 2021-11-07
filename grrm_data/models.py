@@ -41,6 +41,11 @@ class GRRMMap(Base):
     nhessian = Column(Integer)
     elapsedtime_sec = Column(Float)
 
+    registrant = Column(VARCHAR(256))
+    creator = Column(VARCHAR(256))
+
+    accessibility = Column(Integer)
+
 
 class Eq(Base):
     __tablename__ = u"eqs"
