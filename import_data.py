@@ -6,6 +6,8 @@ from typing import Optional
 from sqlalchemy import orm
 from sqlalchemy.engine import create_engine
 import ulid
+from tqdm import tqdm
+import pickle
 
 from grrmlog_parser.core import parse
 
@@ -148,25 +150,27 @@ def import_data(path, root_path, session, dry_run):
     q = session.add(map_obj)
 
     # Process eqs
-    for n in map.eq_list:
+    for n in tqdm(map.eq_list):
         create_eq_obj(session, n, map_obj)
 
     # Process pt_list
-    for pt in map.pt_list:
+    for pt in tqdm(map.pt_list):
         create_edge_obj(session, pt, map_obj)
 
     # Process ts_list
-    for ts in map.ts_list:
+    for ts in tqdm(map.ts_list):
         create_edge_obj(session, ts, map_obj)
 
     # Process dc_list
-    for dc in map.dc_list:
+    for dc in tqdm(map.dc_list):
         create_edge_obj(session, dc, map_obj)
 
     if dry_run:
         print(map_obj)
     else:
         session.commit()
+        with open(path.replace("/", ".") + ".pickle", mode="wb") as f:
+            pickle.dump(map, f)
 
 
 if __name__ == "__main__":
