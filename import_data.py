@@ -169,7 +169,7 @@ def import_data(path, root_path, session, dry_run):
         print(map_obj)
     else:
         session.commit()
-        with open(path.replace("/", ".") + ".pickle", mode="wb") as f:
+        with open(mid.str + "." + path.replace("/", ".") + ".pickle", mode="wb") as f:
             pickle.dump(map, f)
 
 
